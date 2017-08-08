@@ -3,40 +3,51 @@ import json
 import urlparse
 import HTMLParser
 
-class WclItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    keystone = scrapy.Field()
-    name = scrapy.Field()
-    Mas = scrapy.Field()
-    Cri = scrapy.Field()
-    Ver =scrapy.Field()
-    Has = scrapy.Field()
-    Agi = scrapy.Field()
-    Int = scrapy.Field()
-    Sta = scrapy.Field()
-    Lee = scrapy.Field()
-    Avo = scrapy.Field()
-    legend1 = scrapy.Field()
-    legend2 = scrapy.Field()
-    t1=scrapy.Field()
-    t2=scrapy.Field()
-    t3=scrapy.Field()
-    t4=scrapy.Field()
-    t5=scrapy.Field()
-    t6=scrapy.Field()
+# class WclItem(scrapy.Item):
+#     # define the fields for your item here like:
+#     # name = scrapy.Field()
+#     keystone = scrapy.Field()
+#     name = scrapy.Field()
+#     Mas = scrapy.Field()
+#     Cri = scrapy.Field()
+#     Ver =scrapy.Field()
+#     Has = scrapy.Field()
+#     Agi = scrapy.Field()
+#     Int = scrapy.Field()
+#     Sta = scrapy.Field()
+#     Lee = scrapy.Field()
+#     Avo = scrapy.Field()
+#     legend1 = scrapy.Field()
+#     legend2 = scrapy.Field()
+#     t1=scrapy.Field()
+#     t2=scrapy.Field()
+#     t3=scrapy.Field()
+#     t4=scrapy.Field()
+#     t5=scrapy.Field()
+#     t6=scrapy.Field()
 
 class WclSpider(scrapy.Spider):
     name = "wcl"
     role = "BeastMastery"
+    ksMin = 15
+    ksMax = 20
+
+    def __init__(self, role="BeastMastery",kmin=15,kmax=20, *args, **kwargs):
+    #def __init__(self,role,kmin,kmax):
+        self.role=role
+        self.ksMin=kmin
+        self.ksMax=kmaxi+1
+
+
+
     def start_requests(self):
-        urls = [
-            'https://www.warcraftlogs.com/rankings/table/speed/16/0/10/5/1/Any/Any/0/0/0/0/0/?search=&page=1&keystone=15',
-            # 'https://www.warcraftlogs.com/rankings/table/speed/16/0/10/5/1/Any/Any/0/0/0/0/0/?search=&page=1&keystone=19',
-            # 'https://www.warcraftlogs.com/rankings/table/speed/16/0/10/5/1/Any/Any/0/0/0/0/0/?search=&page=1&keystone=18',
-            # 'https://www.warcraftlogs.com/rankings/table/speed/16/0/10/5/1/Any/Any/0/0/0/0/0/?search=&page=1&keystone=17',
-            # 'https://www.warcraftlogs.com/rankings/table/speed/16/0/10/5/1/Any/Any/0/0/0/0/0/?search=&page=1&keystone=16',
-        ]
+       
+        baseUrl = "https://www.warcraftlogs.com/rankings/table/speed/16/0/10/5/1/Any/Any/0/0/0/0/0/?search=&page=1&keystone="
+        urls = []
+        for ksLv in xrange(self.ksMin,self.ksMax):
+            urls.append(baseUrl+str(ksLv))
+            pass
+     
         for url in urls:
             yield scrapy.Request(url=url, callback=self.parse)
 
@@ -119,4 +130,5 @@ class WclSpider(scrapy.Spider):
         res['t4'] = telents[3]
         res['t5'] = telents[4]
         res['t6'] = telents[5]
-	return WclItem(res)
+	# return WclItem(res)
+        return res 
