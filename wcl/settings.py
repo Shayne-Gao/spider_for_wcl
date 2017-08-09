@@ -107,10 +107,13 @@ FIELDS_TO_EXPORT = [
     'Avo',
     'legend1',
     'legend2',
+    'trinket1',
+    'trinket2',
     't1',
     't2',
     't3',
     't4',
     't5',
     't6',
+    't7',
 ]

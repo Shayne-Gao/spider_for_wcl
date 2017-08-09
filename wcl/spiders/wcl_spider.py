@@ -36,7 +36,7 @@ class WclSpider(scrapy.Spider):
     #def __init__(self,role,kmin,kmax):
         self.role=role
         self.ksMin=kmin
-        self.ksMax=kmaxi+1
+        self.ksMax=kmax+1
 
 
 
@@ -117,11 +117,13 @@ class WclSpider(scrapy.Spider):
         for baseInfo in baseInfos:
             infoName = baseInfo.xpath("text()").extract_first()[0:3]
             infoNum = baseInfo.xpath("span/span/text()").extract_first()
+	    #del the , in number
+            infoNum = infoNum.replace(',','')
             res[infoName]=infoNum
         #analysisi legendary
         legendary = response.xpath("//a[@class='legendary']/span/text()").extract()
-        res['legend1'] = legendary[0]
-        res['legend2'] = legendary[1]
+        res['legend1'] = legendary[0].replace(',',' ')
+        res['legend2'] = legendary[1].replace(',',' ')
         #analysis telnet
         telents = response.xpath("//table[@id='summary-talents-0']/tbody/tr/td/a/span/text()").extract()
         res['t1'] = telents[0]
@@ -130,5 +132,10 @@ class WclSpider(scrapy.Spider):
         res['t4'] = telents[3]
         res['t5'] = telents[4]
         res['t6'] = telents[5]
+	res['t7'] = telents[6]
+	 #analysis trinket
+        trinket = response.xpath("//*[@id='summary-gear-0']/tbody/tr/td[text()='Trinket']/../td[3]/a/span/text()").extract()
+        res['trinket1'] = trinket[0].replace(',',' ')
+        res['trinket2'] = trinket[1].replace(',',' ')
 	# return WclItem(res)
         return res 
